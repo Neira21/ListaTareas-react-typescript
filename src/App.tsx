@@ -7,7 +7,8 @@ import { useRef } from 'react'
 //array de objetos typescript
 interface Task {
   id: number,
-  task: string
+  task: string,
+  editing: boolean
 }
 
 function App() {
@@ -27,7 +28,8 @@ function App() {
     
     const ObjectTask = {
       id: new Date().getTime(),
-      task: newTask
+      task: newTask,
+      editing: false
     }
     console.log(ObjectTask)
     AddTask(ObjectTask)
@@ -41,6 +43,19 @@ function App() {
     )
     setTasks(newTasks)
   }
+
+  const openEdit = (id: number) => {
+    const newTasks = tasks.map(
+      (task) => task.id === id ? {...task, editing: !task.editing} : task
+    )
+    setTasks(newTasks)
+  }
+
+  const editTask = (id: number, newTask: string) => {
+    const newTasks = tasks.map(task => task.id === id ? {...task, task: newTask, editing: false} : task)
+    setTasks(newTasks)
+  }
+
 
   return (
     <>
@@ -56,7 +71,7 @@ function App() {
               />
             <button>Agregar</button>
           </form>
-          <ListTasks tasks={tasks} deleteTask={deleteTask} />
+          <ListTasks tasks={tasks} deleteTask={deleteTask} openEdit={openEdit} editTask={editTask} />
         </div>    
       
     </>
